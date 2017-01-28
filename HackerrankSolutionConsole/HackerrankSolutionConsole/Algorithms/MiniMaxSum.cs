@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace HackerrankSolutionConsole
 {
-    class Solution
+    partial class Algorithms
     {
-        public delegate void SolutionDelegate(string[] args);
-
-        static void Main(string[] args)
+        public static void MiniMaxSum(string[] args)
         {
-           
-            Algorithms.MiniMaxSum(args);
+            Console.WriteLine("this is Min Max Sum");
+            Console.ReadLine();
         }
     }
 }
