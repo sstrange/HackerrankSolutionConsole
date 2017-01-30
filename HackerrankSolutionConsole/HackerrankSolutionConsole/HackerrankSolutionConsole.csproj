@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\MiniMaxSum.cs" />
+    <Compile Include="Challenge.cs" />
+    <Compile Include="ChallengeDataHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
