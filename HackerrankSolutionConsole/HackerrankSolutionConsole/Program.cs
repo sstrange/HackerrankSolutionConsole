@@ -25,26 +25,24 @@ namespace HackerrankSolutionConsole
                 "3.  Search challenges",
                 "4.  Exit"
             };
-
-            int menuChoice;
-            do
+            
+            switch (DisplayMenu(mainMenuOptions))
             {
-                menuChoice = DisplayMenu(mainMenuOptions);
-                switch (menuChoice)
-                {
-                    case 1:
-                        ListByDomain(challenges);
-                        break;
-                    case 2:
-                        ListByDifficulty(challenges);
-                        break;
-                    case 3:
-                        //Search();
-                        break;
-                }
+                case 1:
+                    ListByDomain(challenges);
+                    break;
+                case 2:
+                    ListByDifficulty(challenges);
+                    break;
+                case 3:
+                    //Search();
+                    break;
+                default:
+                    break;
             }
-            while (menuChoice != 4);
-            //Algorithms.MiniMaxSum(args);
+            
+            
+            
         }
 
         static void ListByDomain(ChallengeDataHelper challenges)
