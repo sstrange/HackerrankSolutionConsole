@@ -11,9 +11,12 @@ namespace HackerrankSolutionConsole
 
     class Solution
     {
-        const int screenSizeX = 80; //horizontal chars
-        const int screenSizeY = 20; //vertical lines
-        const int mainMenuCode = 1000000;
+        const int screenSizeX   = 74; //horizontal chars
+        const int screenSizeY   = 24; //vertical lines
+        const int mainMenuCode  = 1000000;
+        const int exitCode      = 1000001;
+        const int nextPageCode  = 1000003;
+        const int prevPageCode  = 1000004;
 
         static void Main(string[] args)
         {
@@ -25,27 +28,28 @@ namespace HackerrankSolutionConsole
                 "3.  Search challenges",
                 "4.  Exit"
             };
-            
-            switch (DisplayMenu(mainMenuOptions))
+
+            int menuChoice;
+            do
             {
-                case 1:
-                    ListByDomain(challenges);
-                    break;
-                case 2:
-                    ListByDifficulty(challenges);
-                    break;
-                case 3:
-                    //Search();
-                    break;
-                default:
-                    break;
+                menuChoice = DisplayMenu(mainMenuOptions);
+                switch (menuChoice)
+                {
+                    case 1:
+                        menuChoice = ListByDomain(challenges);
+                        break;
+                    case 2:
+                        ListByDifficulty(challenges);
+                        break;
+                    case 3:
+                        //Search();
+                        break;
+                }
             }
-            
-            
-            
+            while (menuChoice != 4 && menuChoice != exitCode);
         }
 
-        static void ListByDomain(ChallengeDataHelper challenges)
+        static int ListByDomain(ChallengeDataHelper challenges)
         {
             List<string> domainOptions = new List<string>
             {
@@ -54,7 +58,8 @@ namespace HackerrankSolutionConsole
                 "3.  Mathematics",
                 "4.  Artificial Intelligence",
                 "5.  Functional Programming",
-                "6.  Back"
+                "6.  Back",
+                "7.  Main Menu"
             };
             int menuChoice;
             do
@@ -73,7 +78,7 @@ namespace HackerrankSolutionConsole
                         //    Console.WriteLine(c.Name);
                         //    c.Main(new string[] { });
                         //}
-                        DisplayChallenges(challenges.GetAlgorithms());
+                        menuChoice = DisplayChallenges(challenges.GetAlgorithms());
                         break;
                     case 2:
                         
@@ -89,7 +94,8 @@ namespace HackerrankSolutionConsole
                         break;
                 }
             }
-            while (menuChoice != 6);
+            while (menuChoice != 6 && menuChoice != 7 && menuChoice != mainMenuCode && menuChoice != exitCode);
+            return menuChoice;
         }
 
         static void ListByDifficulty(ChallengeDataHelper challenges)
@@ -124,19 +130,28 @@ namespace HackerrankSolutionConsole
         static int DisplayMenu(List<string> menuOptions)
         {
             Console.Clear();
+
+            //header (1 line)
             Console.WriteLine();
+
+            //menu items
             foreach (string mo in menuOptions)
                 Console.WriteLine(mo);
-            for (int i = 0; i < screenSizeY - menuOptions.Count - 1; i++)
+            for (int i = 0; i < screenSizeY - menuOptions.Count - 5; i++)
                 Console.WriteLine();
+
+            //footer (4 lines)
+            Console.WriteLine(new string('-', screenSizeX));
+            Console.WriteLine("   b: back       m: main menu");
+            Console.WriteLine(new string('-', screenSizeX));
             Console.Write("Enter Selection (1 - {0}):", menuOptions.Count);
             string input = Console.ReadLine();
             int result;
             int.TryParse(input, out result);
             if (result >= 1 && result <= menuOptions.Count)
                 return result;
-            else
-                return DisplayMenu(menuOptions);
+            
+            return DisplayMenu(menuOptions);
         }
 
         static int DisplayChallenges(List<Challenge> challenges)
@@ -144,7 +159,10 @@ namespace HackerrankSolutionConsole
             //todo: back
             //todo: paging
             //todo: none listed
+            int menuItems = challenges.Count;
             Console.Clear();
+
+            //header (3 lines)
             Console.WriteLine();
             Console.WriteLine(BuildChallengeLine("", "Challenge","Domain","Difficulty"));
             Console.WriteLine(new string('-', screenSizeX));
@@ -152,27 +170,34 @@ namespace HackerrankSolutionConsole
             for(int i = 1; i <= challenges.Count; i++)
             {
                 Challenge c = challenges[i-1];
-                Console.WriteLine(BuildChallengeLine(i.ToString()+".", c.Name, c.Domain.ToString(), c.Difficulty.ToString()));
+                Console.WriteLine(BuildChallengeLine(i+".", c.Name, c.Domain.ToString(), c.Difficulty.ToString()));
             }
-            Console.WriteLine(BuildChallengeLine((challenges.Count + 1).ToString() + ".", "Back", "", ""));
-            for (int i = 0; i < screenSizeY - challenges.Count - 4; i++)
+            Console.WriteLine(BuildChallengeLine((++menuItems) + ".", "Back", "", ""));
+            //Console.WriteLine(BuildChallengeLine((++menuItems).ToString() + ".", "Main Menu", "", ""));
+            
+
+            for (int i = 0; i < screenSizeY - menuItems - 3; i++)
                 Console.WriteLine();
-            Console.Write("Enter Selection (1 - {0}):", challenges.Count);
+            Console.Write("Enter Selection (1 - {0}):", menuItems);
             string input = Console.ReadLine();
             int result;
             int.TryParse(input, out result);
-            if (result >= 1 && result <= challenges.Count)
+            if (result == 9)
+                return mainMenuCode;
+            if (result == 10)
+                return exitCode;
+            if (result >= 1 && result <= menuItems)
                 return result;
-            else
-                return DisplayChallenges(challenges);
+
+            return DisplayChallenges(challenges);
         }
 
         static string BuildChallengeLine(string numberColumnText, string nameColumnText, string domainColumnText, string difficultyColumnText)
         {
             int numberColumnSize = 4;
-            int nameColumnSize = Convert.ToInt16((screenSizeX-numberColumnSize) * .53); //50;
-            int domainColunmSize = Convert.ToInt16((screenSizeX - numberColumnSize) * .35); //30;
-            int difficultyColumnSize = Convert.ToInt16((screenSizeX - numberColumnSize) * .12); //10;
+            int nameColumnSize = Convert.ToInt16((screenSizeX-numberColumnSize) * .51); //50;
+            int domainColunmSize = Convert.ToInt16((screenSizeX - numberColumnSize) * .33); //30;
+            int difficultyColumnSize = Convert.ToInt16((screenSizeX - numberColumnSize) * .16); //10;
 
             string line = numberColumnText.PadRight(numberColumnSize).Substring(0, numberColumnSize); 
             line += nameColumnText.PadRight(nameColumnSize).Substring(0, nameColumnSize);
