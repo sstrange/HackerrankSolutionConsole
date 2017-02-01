@@ -11,9 +11,10 @@ namespace HackerrankSolutionConsole
 
     class Solution
     {
-        const int screenSizeX   = 74; //horizontal chars
-        const int screenSizeY   = 24; //vertical lines
-        
+        const int screenSizeX           = 74; //horizontal chars
+        const int screenSizeY           = 24; //vertical lines
+        const int headerFooterSize      = 7; //7 = 3 lines in header + 4 lines in footer
+
 
         static void Main(string[] args)
         {
@@ -35,14 +36,14 @@ namespace HackerrankSolutionConsole
             string menuChoice;
             do
             {
-                menuChoice = DisplayMenu(mainMenuOptions, footerOptions);
+                menuChoice = DisplayMenu(mainMenuOptions, footerOptions, "    Main Menu");
                 switch (menuChoice)
                 {
                     case "1":
                         menuChoice = DomainMenu(challenges);
                         break;
                     case "2":
-                        DifficultyMenu(challenges);
+                        menuChoice = DifficultyMenu(challenges);
                         break;
                     case "3":
                         //Search();
@@ -68,7 +69,7 @@ namespace HackerrankSolutionConsole
             string menuChoice;
             do
             {
-                menuChoice = DisplayMenu(domainOptions, footerOptions);
+                menuChoice = DisplayMenu(domainOptions, footerOptions, "    Domains");
                 switch (menuChoice)
                 {
                     case "1":
@@ -82,7 +83,7 @@ namespace HackerrankSolutionConsole
                         //    Console.WriteLine(c.Name);
                         //    c.Main(new string[] { });
                         //}
-                        menuChoice = ChallengesMenu(challenges.GetAlgorithms());
+                        menuChoice = ChallengesMenu(challenges.GetAlgorithms()).Replace("b"," ");
                         break;
                     case "2":
                         
@@ -97,12 +98,14 @@ namespace HackerrankSolutionConsole
 
                         break;
                 }
+                //if (menuChoice == "b")  //user selected back in ChallengeSelectedMenu(). Stop here.
+                //    menuChoice = "";
             }
             while (!footerOptions.Contains(menuChoice));
             return menuChoice;
         }
 
-        static void DifficultyMenu(ChallengeDataHelper challenges)
+        static string DifficultyMenu(ChallengeDataHelper challenges)
         {
             List<string> domainOptions = new List<string>
             {
@@ -117,7 +120,7 @@ namespace HackerrankSolutionConsole
             string menuChoice;
             do
             {
-                menuChoice = DisplayMenu(domainOptions, footerOptions);
+                menuChoice = DisplayMenu(domainOptions, footerOptions, "    Difficulty");
                 switch (menuChoice)
                 {
                     case "1":
@@ -132,19 +135,69 @@ namespace HackerrankSolutionConsole
                 }
             }
             while (!footerOptions.Contains(menuChoice));
+            return menuChoice;
         }
 
-        static string DisplayMenu(List<string> menuOptions, List<string> footerOptions)
+        static string ChallengesMenu(List<Challenge> challenges)
+        {   
+            //todo: paging
+            List<string> footerOptions = new List<string> { "e", "b", "m" };
+            int pageSize = screenSizeX - 7;
+            string menuChoice;
+            //.Skip(startIndex).Take(pageSize).ToList()
+            do
+            {
+                menuChoice = DisplayMenu(challenges, footerOptions);    //menuChoice validated in DisplayMenu(). now contains a valid value
+                if (!footerOptions.Contains(menuChoice))
+                {
+                    int index;
+                    int.TryParse(menuChoice, out index);
+                    menuChoice = ChallengeSelectedMenu(challenges[--index]).Replace("b", "");
+                }
+            }
+            while (!footerOptions.Contains(menuChoice));
+            return menuChoice;
+        }
+
+        static string ChallengeSelectedMenu(Challenge challenge)
+        {
+            List<string> domainOptions = new List<string>
+            {
+                "1.  Open challege description in hackerrank.com",
+                "2.  Run solution"
+            };
+
+            List<string> footerOptions = new List<string> { "e", "b", "m" };
+
+            string menuChoice;
+            do
+            {
+                menuChoice = DisplayMenu(domainOptions, footerOptions, "    " + challenge.Name);
+                switch (menuChoice)
+                {
+                    case "1":
+
+                        break;
+                    case "2":
+
+                        break;
+                }
+            }
+            while (!footerOptions.Contains(menuChoice));
+            return menuChoice;
+        }
+
+        static string DisplayMenu(List<string> menuOptions, List<string> footerOptions, string header)
         {
             Console.Clear();
 
             //header (3 lines)
-            PrintHeader(false);
+            PrintHeader(header);
 
             //menu items
             foreach (string mo in menuOptions)
                 Console.WriteLine(mo);
-            for (int i = 0; i < screenSizeY - menuOptions.Count - 7; i++)       //7 = 3 lines in header + 4 lines in footer
+            for (int i = 0; i < screenSizeY - menuOptions.Count - headerFooterSize; i++)       
                 Console.WriteLine();
 
             //footer (4 lines)
@@ -154,46 +207,55 @@ namespace HackerrankSolutionConsole
             if (ValidateInput(input, menuOptions.Count, footerOptions))
                 return input;
             
-            return DisplayMenu(menuOptions, footerOptions);
+            return DisplayMenu(menuOptions, footerOptions, header);
         }
 
-        static string DisplayMenu(List<Challenge> challenges, List<string> footerOptions)
+        static string DisplayMenu(List<Challenge> challenges, List<string> footerOptions, int page = 1)
         {
             Console.Clear();
 
             //header (3 lines)
-            PrintHeader(true);
+            PrintHeader(BuildChallengeLine("", "Challenge", "Domain", "Difficulty"));
+
+            int pageSize = screenSizeY - headerFooterSize;
+            int first = (page -1) * pageSize +1;
+            int last = challenges.Count > (pageSize * page) ? pageSize * page : challenges.Count;
 
             //challenge list
             for (int i = 1; i <= challenges.Count; i++)
             {
-                Challenge c = challenges[i - 1];
-                Console.WriteLine(BuildChallengeLine(i + ".", c.Name, c.Domain.ToString(), c.Difficulty.ToString()));
+                if (i >= first && i <= last)
+                {
+                    Challenge c = challenges[i - 1];
+                    Console.WriteLine(BuildChallengeLine(i + ".", c.Name, c.Domain.ToString(), c.Difficulty.ToString()));
+                }
             }
-            for (int i = 0; i < screenSizeY - challenges.Count - 7; i++)       //7 = 3 lines in header + 4 lines in footer
+            for (int i = 0; i < screenSizeY - challenges.Count - headerFooterSize; i++)       
                 Console.WriteLine();
 
+            
             //footer (4 lines)
+            if(first > 1)
+                footerOptions.Add("p");
+            if(last < challenges.Count)
+                footerOptions.Add("n");
             PrintFooter(challenges.Count, footerOptions);
 
             string input = Console.ReadLine().ToLower().Trim();
             if (ValidateInput(input, challenges.Count, footerOptions))
                 return input;
-
+            
             return DisplayMenu(challenges, footerOptions);
         }
 
         static bool ValidateInput(string input, int menuOptionCount, List<string> footerOptions)
         {
-
             if (footerOptions.Contains(input))
                 return true; 
             int result;
             if (int.TryParse(input, out result))
                 return (result >= 1 && result <= menuOptionCount);
-            else
-                return false;
-           
+            return false;
         }
 
         static void PrintFooter(int menuOptionCount, List<string> footerOptions)
@@ -221,28 +283,18 @@ namespace HackerrankSolutionConsole
             else
                 footerLine += "               ";
            
-            string prompt = string.Format("Enter Selection (1 - {0}, {1}):", menuOptionCount, string.Join(", ", footerOptions));
+            string prompt = string.Format("Enter Selection (1-{0}, {1}): ", menuOptionCount, string.Join(", ", footerOptions));
             Console.WriteLine(new string('-', screenSizeX));
             Console.WriteLine(footerLine);
             Console.WriteLine(new string('-', screenSizeX));
             Console.Write(prompt);
         }
 
-        static void PrintHeader(bool showChallenges)
+        static void PrintHeader(string header)
         {
             Console.WriteLine();
-            if (showChallenges)
-                Console.WriteLine(BuildChallengeLine("", "Challenge", "Domain", "Difficulty"));
-            else
-                Console.WriteLine();
+            Console.WriteLine(header);
             Console.WriteLine(new string('-', screenSizeX));
-        }
-
-        static string ChallengesMenu(List<Challenge> challenges)
-        {
-            
-            //todo: none listed
-            
         }
 
         static string BuildChallengeLine(string numberColumnText, string nameColumnText, string domainColumnText, string difficultyColumnText)
