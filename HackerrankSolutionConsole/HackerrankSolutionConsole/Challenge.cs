@@ -20,6 +20,7 @@ namespace HackerrankSolutionConsole
         public string Path;
         public Difficulty Difficulty;
         public Domain Domain;
+        public Subdomain Subdomain;
         //public SolutionDelegate Solution;
         public abstract void Main(string[] args);
     }
@@ -39,4 +40,29 @@ namespace HackerrankSolutionConsole
         ArtificialIntelligence,
         FunctionalProgramming
     }
+    
+    public enum Subdomain 
+    {
+        //Algorithms
+        Warmup,
+        Implementation, 
+        Constructive,
+        Strings,
+        Sorting,
+        Search,
+        GraphTheory,
+        Greedy,
+        DynamicProg,
+        BitManipulation,
+        Recursion,
+        GameTheory,
+        NPComplete,
+
+    }
+
+   
+
+
+    
+
 }

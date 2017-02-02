@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace HackerrankSolutionConsole
 {
-    partial class Algorithms
-    {
-        public static void MiniMaxSum(string[] args)
-        {
-            Console.WriteLine("this is Min Max Sum");
-            Console.ReadLine();
-        }
-    }
+    //partial class Algorithms
+    //{
+    //    public static void MiniMaxSum(string[] args)
+    //    {
+    //        Console.WriteLine("this is Min Max Sum");
+    //        Console.ReadLine();
+    //    }
+    //}
 
 
     public class MiniMaxSum : Challenge
@@ -21,7 +21,7 @@ namespace HackerrankSolutionConsole
         public override void Main(string[] args)
         {
             Console.WriteLine("this is Min Max Sum main output");
-            Console.ReadLine();
+           
         }
         public MiniMaxSum()
         {
@@ -29,7 +29,7 @@ namespace HackerrankSolutionConsole
             Path = "mini-max-sum";
             Difficulty = Difficulty.Easy;
             Domain = Domain.Algorithms;
-
+            Subdomain = Subdomain.Implementation;
         }
         
     }
@@ -42,12 +42,13 @@ namespace HackerrankSolutionConsole
             Console.WriteLine("this is Another Challenge main output");
             Console.ReadLine();
         }
-        public AnotherChallenge()
+        public AnotherChallenge(int num)
         {
-            Name = "Another Challenge";
+            Name = "Another Challenge " + num;
             Path = "mini-max-sum";
             Difficulty = Difficulty.Hard;
             Domain = Domain.Algorithms;
+            Subdomain = Subdomain.BitManipulation;
         }
 
     }
