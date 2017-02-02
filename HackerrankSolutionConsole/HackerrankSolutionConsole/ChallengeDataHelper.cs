@@ -8,61 +8,97 @@ namespace HackerrankSolutionConsole
 {
     public class ChallengeDataHelper 
     {
-        private List<Challenge> ChallengeList;
+        private readonly List<Challenge> _challengeList;
         
         public ChallengeDataHelper()
         {
-            ChallengeList = BuildChallengeList();
+            _challengeList = BuildChallengeList();
         }
 
-        public List<Challenge> GetAllChallenges()
+        public List<Challenge> AllChallenges
         {
-            return ChallengeList;
+            get { return _challengeList; }
         }
+        public List<Challenge> Algorithms
+        {
+            get{ return _challengeList.Where(c => c.Domain == Domain.Algorithms).ToList(); }
+        }
+        public List<Challenge> ArtificialIntelligence
+        {
+            get { return _challengeList.Where(c => c.Domain == Domain.ArtificialIntelligence).ToList(); }
+        }
+        public List<Challenge> DataStructures
+        {
+            get { return _challengeList.Where(c => c.Domain == Domain.DataStructures).ToList(); }
+        }
+        public List<Challenge> FunctionalProgramming
+        {
+            get { return _challengeList.Where(c => c.Domain == Domain.FunctionalProgramming).ToList(); }
+        }
+        public List<Challenge> Mathematics
+        {
+            get { return _challengeList.Where(c => c.Domain == Domain.Mathematics).ToList(); }
+        }
+        public List<Challenge> Easy
+        {
+            get { return _challengeList.Where(c => c.Difficulty == Difficulty.Easy).ToList(); }
+        }
+        public List<Challenge> Medium
+        {
+            get { return _challengeList.Where(c => c.Difficulty == Difficulty.Medium).ToList(); }
+        }
+        public List<Challenge> Hard
+        {
+            get { return _challengeList.Where(c => c.Difficulty == Difficulty.Hard).ToList(); }
+        }
+        //public List<Challenge> GetAllChallenges()
+        //{
+        //    return _challengeList;
+        //}
 
-        public List<Challenge> GetAlgorithms()
-        {
-            return ChallengeList.Where(c => c.Domain == Domain.Algorithms).ToList();
-        }
+        //public List<Challenge> GetAlgorithms()
+        //{
+        //    return _challengeList.Where(c => c.Domain == Domain.Algorithms).ToList();
+        //}
 
-        public List<Challenge> GetArtificialIntelligence()
-        {
-            return ChallengeList.Where(c => c.Domain == Domain.ArtificialIntelligence).ToList();
-        }
+        //public List<Challenge> GetArtificialIntelligence()
+        //{
+        //    return _challengeList.Where(c => c.Domain == Domain.ArtificialIntelligence).ToList();
+        //}
 
-        public List<Challenge> GetDataStructures()
-        {
-            return ChallengeList.Where(c => c.Domain == Domain.DataStructures).ToList();
-        }
+        //public List<Challenge> GetDataStructures()
+        //{
+        //    return _challengeList.Where(c => c.Domain == Domain.DataStructures).ToList();
+        //}
 
-        public List<Challenge> GetFunctionalProgramming()
-        {
-            return ChallengeList.Where(c => c.Domain == Domain.FunctionalProgramming).ToList();
-        }
+        //public List<Challenge> GetFunctionalProgramming()
+        //{
+        //    return _challengeList.Where(c => c.Domain == Domain.FunctionalProgramming).ToList();
+        //}
 
-        public List<Challenge> GetMathematics()
-        {
-            return ChallengeList.Where(c => c.Domain == Domain.Mathematics).ToList();
-        }
+        //public List<Challenge> GetMathematics()
+        //{
+        //    return _challengeList.Where(c => c.Domain == Domain.Mathematics).ToList();
+        //}
 
-        public List<Challenge> GetEasy()
-        {
-            return ChallengeList.Where(c => c.Difficulty == Difficulty.Easy).ToList();
-        }
+        //public List<Challenge> GetEasy()
+        //{
+        //    return _challengeList.Where(c => c.Difficulty == Difficulty.Easy).ToList();
+        //}
 
-        public List<Challenge> GetMedium()
-        {
-            return ChallengeList.Where(c => c.Difficulty == Difficulty.Medium).ToList();
-        }
+        //public List<Challenge> GetMedium()
+        //{
+        //    return _challengeList.Where(c => c.Difficulty == Difficulty.Medium).ToList();
+        //}
 
-        public List<Challenge> GetHard()
-        {
-            return ChallengeList.Where(c => c.Difficulty == Difficulty.Hard).ToList();
-        }
+        //public List<Challenge> GetHard()
+        //{
+        //    return _challengeList.Where(c => c.Difficulty == Difficulty.Hard).ToList();
+        //}
 
         public List<Challenge> Search(string searchString)
         {
-            return ChallengeList.Where(c => c.Name.ToLower().Contains(searchString.ToLower())).ToList();
+            return _challengeList.Where(c => c.Name.ToLower().Contains(searchString.ToLower())).ToList();
         }
 
         private List<Challenge> BuildChallengeList()
@@ -100,9 +136,9 @@ namespace HackerrankSolutionConsole
                 new AnotherChallenge(28),
                 new AnotherChallenge(29),
                 new AnotherChallenge(30),
-                //new AnotherChallenge(31),
-                //new AnotherChallenge(32),
-                //new AnotherChallenge(33),
+                new AnotherChallenge(31),
+                new AnotherChallenge(32),
+                new AnotherChallenge(33),
             };
         }
 

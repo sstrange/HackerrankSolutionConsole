@@ -22,16 +22,18 @@ namespace HackerrankSolutionConsole
         {
             ChallengeDataHelper challenges = new HackerrankSolutionConsole.ChallengeDataHelper();
             MainMenu(challenges);
+
         }
 
         static void MainMenu(ChallengeDataHelper challenges)
         {
             List<string> mainMenuOptions = new List<string>
             {
-                " 1.  List all challenges",
-                " 2.  List challenges by HackerRank domain (category)",
-                " 3.  List challenges by difficulty rating",
-                " 4.  Search challenges"
+                " 1.  List all challenges (" + challenges.AllChallenges.Count + ")",
+                " 2.  List challenges by HackerRank domain",
+                " 3.  List challenges by difficulty",
+                " 4.  Search challenges",
+                //" 5.  Keypress search"
             };
 
             List<string> footerOptions = new List<string> { "e" };
@@ -39,11 +41,11 @@ namespace HackerrankSolutionConsole
             string menuChoice;
             do
             {
-                menuChoice = DisplayMenu(mainMenuOptions, footerOptions, "    Main Menu");
+                menuChoice = DisplayMenu(mainMenuOptions, footerOptions, new string(' ', numberColumnSize) + "Main Menu");
                 switch (menuChoice)
                 {
                     case "1":
-                        menuChoice = ChallengesMenu(challenges.GetAllChallenges());
+                        menuChoice = ChallengesMenu(challenges.AllChallenges);
                         break;
                     case "2":
                         menuChoice = DomainMenu(challenges);
@@ -54,6 +56,9 @@ namespace HackerrankSolutionConsole
                     case "4":
                         menuChoice = SearchMenu(challenges);
                         break;
+                    //case "5":
+                    //    menuChoice = KeypressSearchMenu(challenges);
+                    //    break;
                 }
             }
             while (!footerOptions.Contains(menuChoice));
@@ -64,11 +69,11 @@ namespace HackerrankSolutionConsole
         {
             var domainOptions = new List<string>
             {
-                " 1.  Algorithms",
-                " 2.  Data Structures",
-                " 3.  Mathematics",
-                " 4.  Artificial Intelligence",
-                " 5.  Functional Programming"
+                " 1.  Algorithms (" + challenges.Algorithms.Count + ")",
+                " 2.  Data Structures (" + challenges.DataStructures.Count + ")",
+                " 3.  Mathematics (" + challenges.Mathematics.Count + ")",
+                " 4.  Artificial Intelligence (" + challenges.ArtificialIntelligence.Count + ")",
+                " 5.  Functional Programming (" + challenges.FunctionalProgramming.Count + ")",
             };
 
             List<string> footerOptions = new List<string> { "e","b","m" };
@@ -76,23 +81,23 @@ namespace HackerrankSolutionConsole
             string menuChoice;
             do
             {
-                menuChoice = DisplayMenu(domainOptions, footerOptions, "    Domains");
+                menuChoice = DisplayMenu(domainOptions, footerOptions, new string(' ', numberColumnSize) + "Domains");
                 switch (menuChoice)
                 {
                     case "1":
-                        menuChoice = ChallengesMenu(challenges.GetAlgorithms()).Replace("b"," ");
+                        menuChoice = ChallengesMenu(challenges.Algorithms).Replace("b"," ");
                         break;
                     case "2":
-                        menuChoice = ChallengesMenu(challenges.GetDataStructures()).Replace("b", " ");
+                        menuChoice = ChallengesMenu(challenges.DataStructures).Replace("b", " ");
                         break;
                     case "3":
-                        menuChoice = ChallengesMenu(challenges.GetMathematics()).Replace("b", " ");
+                        menuChoice = ChallengesMenu(challenges.Mathematics).Replace("b", " ");
                         break;
                     case "4":
-                        menuChoice = ChallengesMenu(challenges.GetArtificialIntelligence()).Replace("b", " ");
+                        menuChoice = ChallengesMenu(challenges.ArtificialIntelligence).Replace("b", " ");
                         break;
                     case "5":
-                        menuChoice = ChallengesMenu(challenges.GetFunctionalProgramming()).Replace("b", " ");
+                        menuChoice = ChallengesMenu(challenges.FunctionalProgramming).Replace("b", " ");
                         break;
                 }
             }
@@ -104,9 +109,9 @@ namespace HackerrankSolutionConsole
         {
             var domainOptions = new List<string>
             {
-                " 1.  Easy",
-                " 2.  Medium",
-                " 3.  Hard"
+                " 1.  Easy (" + challenges.Easy.Count + ")",
+                " 2.  Medium (" + challenges.Medium.Count + ")",
+                " 3.  Hard (" + challenges.Hard.Count + ")",
             };
 
             List<string> footerOptions = new List<string> { "e", "b", "m" };
@@ -114,17 +119,17 @@ namespace HackerrankSolutionConsole
             string menuChoice;
             do
             {
-                menuChoice = DisplayMenu(domainOptions, footerOptions, "    Difficulty");
+                menuChoice = DisplayMenu(domainOptions, footerOptions, new string(' ', numberColumnSize) + "Difficulty");
                 switch (menuChoice)
                 {
                     case "1":
-                        menuChoice = ChallengesMenu(challenges.GetEasy()).Replace("b", " ");
+                        menuChoice = ChallengesMenu(challenges.Easy).Replace("b", " ");
                         break;
                     case "2":
-                        menuChoice = ChallengesMenu(challenges.GetMedium()).Replace("b", " ");
+                        menuChoice = ChallengesMenu(challenges.Medium).Replace("b", " ");
                         break;
                     case "3":
-                        menuChoice = ChallengesMenu(challenges.GetHard()).Replace("b", " ");
+                        menuChoice = ChallengesMenu(challenges.Hard).Replace("b", " ");
                         break;
                 }
             }
@@ -185,6 +190,55 @@ namespace HackerrankSolutionConsole
             return menuChoice;
         }
 
+        //static string KeypressSearchMenu(ChallengeDataHelper challenges)
+        //{
+        //    var footerOptions = new List<string> { "e", "b", "m" };
+        //    string menuChoice;
+        //    do
+        //    {
+        //        string searchString = "";
+        //        char? lastChar = null;
+        //        var searchResults = new List<Challenge>() { };
+        //        do
+        //        {
+        //            searchString += lastChar;
+
+        //            Console.Clear();
+
+        //            //Header
+        //            PrintHeader(BuildChallengeLine("", "Challenge", "Domain", "Subdomain", "Difficulty"));
+
+        //            //Challenge list
+        //            if (searchString != "")
+        //                searchResults = challenges.Search(searchString);
+
+        //            int pageSize = screenSizeY - headerFooterSize;
+        //            int numResultsToDisplay = (searchResults.Count > pageSize) ? pageSize : searchResults.Count;
+        //            for (int i = 1; i <= numResultsToDisplay; i++)
+        //            {  
+        //                Challenge c = searchResults[i - 1];
+        //                Console.WriteLine(BuildChallengeLine(i + ".", c.Name, c.Domain.ToString(), c.Subdomain.ToString(), c.Difficulty.ToString()));
+        //            }
+        //            for (int i = 0; i < screenSizeY - numResultsToDisplay - headerFooterSize; i++)
+        //                Console.WriteLine();
+
+        //            //Footer
+        //            string prompt = " Search for: " + searchString;
+        //            Console.WriteLine(new string('-', screenSizeX));
+        //            Console.WriteLine();
+        //            Console.WriteLine(new string('-', screenSizeX));
+        //            Console.Write(prompt);
+
+        //            //Input
+        //            lastChar = Console.ReadKey().KeyChar;
+        //        }
+        //        while (lastChar != (char)13); 
+        //        menuChoice = ChallengesMenu(challenges.Search(searchString)).Replace("b", "");
+        //    }
+        //    while (!footerOptions.Contains(menuChoice));
+        //    return menuChoice;
+        //}
+
         static string ChallengeSelectedMenu(Challenge challenge)
         {
             var domainOptions = new List<string>
@@ -198,7 +252,7 @@ namespace HackerrankSolutionConsole
             string menuChoice;
             do
             {
-                menuChoice = DisplayMenu(domainOptions, footerOptions, "    " + challenge.Name);
+                menuChoice = DisplayMenu(domainOptions, footerOptions, new string(' ', numberColumnSize) + challenge.Name);
                 switch (menuChoice)
                 {
                     case "1":
@@ -331,10 +385,8 @@ namespace HackerrankSolutionConsole
             Console.WriteLine(new string('-', screenSizeX));
         }
 
-
         static string BuildChallengeLine(string numberColumnText, string nameColumnText, string domainColumnText, string subdomainColumnText, string difficultyColumnText)
-        {
-            int numberColumnSize = 5;
+        {   
             int nameColumnSize = Convert.ToInt16((screenSizeX - numberColumnSize) * .36);
             int domainColunmSize = Convert.ToInt16((screenSizeX - numberColumnSize) * .24);
             int subdomainColumnSize = Convert.ToInt16((screenSizeX - numberColumnSize) * .24);
