@@ -60,9 +60,28 @@ namespace HackerrankSolutionConsole
 
     }
 
-   
+    public class AnotherChallenge : Challenge
+    {
+        public override void Main(string[] args)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine("this is Another Challenge main output");
+                System.Threading.Thread.Sleep(1000);
+            }
+        }
+        public AnotherChallenge(int num)
+        {
+            Name = "Another Challenge " + num;
+            Path = "mini-max-sum";
+            Difficulty = Difficulty.Hard;
+            Domain = Domain.Algorithms;
+            Subdomain = Subdomain.BitManipulation;
+        }
+
+    }
 
 
-    
+
 
 }

@@ -260,8 +260,16 @@ namespace HackerrankSolutionConsole
                         break;
                     case "2":
                         Console.Clear();
-                        challenge.Main(new string[] {});
-                        Console.WriteLine("Press any key to return to the console.");
+                        try
+                        {
+                            challenge.Main(new string[] { });
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("An exception was thrown by the challenge, likely due to invalid input. Input validation and error handling are not part of most Hackerrank challenges. See the challenge description for valid input. ");
+                            Console.WriteLine("Exception text:" + ex.Message);
+                        }
+                        Console.WriteLine("Press enter to return to the console.");
                         Console.ReadLine();
                         break;
                 }
