@@ -190,7 +190,7 @@ namespace HackerrankSolutionConsole
             return menuChoice;
         }
 
-        //static string KeypressSearchMenu(ChallengeDataHelper challenges)
+        //static string KeypressSearchMenu(ChallengeDataHelper challenges) //
         //{
         //    var footerOptions = new List<string> { "e", "b", "m" };
         //    string menuChoice;
